@@ -15,7 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import include
+from django.views.generic import RedirectView
+from measure.views import pressure_create_view,index,weight_create_view,sugar_create_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/user/blood/pressure/', pressure_create_view),
+    path('api/user/weight/', weight_create_view),
+    path('api/user/blood/sugar/', sugar_create_view),
+    path('api/user/records', sugar_create_view),
+    path('', RedirectView.as_view(url='/halo/')),
+    path('halo/',index),
 ]
+#api/user/records
