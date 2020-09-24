@@ -24,7 +24,7 @@ urlpatterns = [
     path('api/user/blood/pressure/', pressure_create_view),
     path('api/user/weight/', weight_create_view),
     path('api/user/blood/sugar/', sugar_create_view),
-    path('api/user/records', sugar_create_view),
+    path('api/user/diet/', sugar_create_view),
     path('', RedirectView.as_view(url='/halo/')),
     path('halo/',index),
 ]

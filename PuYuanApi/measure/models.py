@@ -21,6 +21,11 @@ class Sugar(models.Model): #10.上傳血糖
     timeperiod = models.DecimalField(max_digits = 10, decimal_places=0)
     recorded_at = models.DateTimeField()
 
+class Diet(models.Model): #10.上傳血糖
+    sugar = models.DecimalField(max_digits = 10, decimal_places=0)
+    timeperiod = models.DecimalField(max_digits = 10, decimal_places=0)
+    recorded_at = models.DateTimeField()
+
 @admin.register(Pressure)
 class PressureAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Pressure._meta.fields]
