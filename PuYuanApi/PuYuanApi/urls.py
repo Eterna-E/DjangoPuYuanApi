@@ -21,9 +21,10 @@ from measure.views import pressure_create_view,index,weight_create_view,sugar_cr
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/user/blood/pressure/', pressure_create_view),
-    path('api/user/weight/', weight_create_view),
-    path('api/user/blood/sugar/', sugar_create_view),
+    # path('api/user/blood/pressure/', pressure_create_view),
+    # path('api/user/weight/', weight_create_view),
+    # path('api/user/blood/sugar/', sugar_create_view),
+    path('api/', include('measure.urls')),
     path('api/user/diet/', sugar_create_view),
     path('', RedirectView.as_view(url='/halo/')),
     path('halo/',index),
