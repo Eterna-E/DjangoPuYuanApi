@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'measure.apps.MeasureConfig',
+    'friend.apps.FriendConfig',
 ]
 
 MIDDLEWARE = [

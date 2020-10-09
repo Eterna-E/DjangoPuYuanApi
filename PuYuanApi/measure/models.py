@@ -3,26 +3,32 @@ from django.contrib import admin
 
 # Create your models here.
 class Pressure(models.Model):#8.上傳血壓測量結果
+    uid = models.CharField(max_length = 100,blank=True)
     systolic = models.FloatField(null=True)
     diastolic = models.FloatField(null=True)
     pulse = models.DecimalField(max_digits = 10, decimal_places=0,null=True)
     recorded_at = models.DateTimeField(blank=True)
     # recorded_at = models.DateTimeField(auto_now_add=True)
     # print(systolic,diastolic,pulse,recorded_at)
+    date = models.DateField(auto_now=False, auto_now_add=True, blank=True,null=True)
 
 class Weight(models.Model): #9.上傳體重測量結果
+    uid = models.CharField(max_length = 100,blank=True)
     weight = models.FloatField(null=True)
     body_fat = models.FloatField(null=True)
     bmi = models.FloatField(blank=True)
     recorded_at = models.DateTimeField(blank=True)
+    date = models.DateField(auto_now=False, auto_now_add=True, blank=True,null=True)
 
 class Sugar(models.Model): #10.上傳血糖
+    uid = models.CharField(max_length = 100,blank=True)
     sugar = models.DecimalField(max_digits = 10, decimal_places=0, blank=True, null=True)
     timeperiod = models.DecimalField(max_digits = 10, decimal_places=0, blank=True, null=True)
     recorded_at = models.DateTimeField(blank=True)
+    date = models.DateField(auto_now=False, auto_now_add=True, blank=True,null=True)
 
 class Diary_diet(models.Model): #15.飲食日記
-    # uid = models.CharField(max_length = 100,blank=True)
+    uid = models.CharField(max_length = 100,blank=True)
     description = models.CharField(max_length=10, blank=True, null=True, default=0)
     meal = models.DecimalField(max_digits=5, decimal_places=0, blank=True, null=True, default=0)
     tag = models.CharField(max_length = 100,blank=True)
@@ -32,6 +38,16 @@ class Diary_diet(models.Model): #15.飲食日記
     lng = models.FloatField(max_length = 100,blank=True)
     recorded_at = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True, blank=True)
+    date = models.DateField(auto_now=False, auto_now_add=True, blank=True,null=True)
+
+class UserCare(models.Model):
+    uid = models.CharField(max_length = 100,blank=True)
+    member_id = models.CharField(max_length = 100,blank=True)
+    reply_id = models.IntegerField(blank=True,null=True)
+    message = models.CharField(max_length = 100,blank=True)
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
+    date = models.DateField(auto_now=False, auto_now_add=True, blank=True,null=True)
 
 @admin.register(Pressure)
 class PressureAdmin(admin.ModelAdmin):
@@ -49,3 +65,7 @@ class SugarAdmin(admin.ModelAdmin):
 @admin.register(Diary_diet)
 class Diary_dietAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Diary_diet._meta.fields]
+
+@admin.register(UserCare)
+class UserCareAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in UserCare._meta.fields]
