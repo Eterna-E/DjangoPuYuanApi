@@ -12,7 +12,7 @@ def index(request):
     })
 
 @csrf_exempt
-def pressure_create_view(request): # 上傳血壓測量結果
+def pressure_create_view(request): # 8.上傳血壓測量結果
     uid = request.user.id
     uid = 123
     if request.method == "POST":
@@ -33,7 +33,7 @@ def pressure_create_view(request): # 上傳血壓測量結果
     return JsonResponse(output)
 
 @csrf_exempt
-def weight_create_view(request): # 上傳體重測量結果
+def weight_create_view(request): # 9.上傳體重測量結果
     uid = request.user.id
     uid = 123
     if request.method == "POST":
@@ -54,7 +54,7 @@ def weight_create_view(request): # 上傳體重測量結果
     return JsonResponse(output)
 
 @csrf_exempt
-def sugar_create_view(request): # 上傳血糖測量結果
+def sugar_create_view(request): # 10.上傳血糖測量結果
     uid = request.user.id
     uid = 123
     if request.method == "POST":
@@ -74,7 +74,7 @@ def sugar_create_view(request): # 上傳血糖測量結果
     return JsonResponse(output)
 
 @csrf_exempt
-def diary_diet_create_view(request): # 飲食日記
+def diary_diet_create_view(request): # 15.飲食日記
     uid = request.user.id
     uid = 123
     if request.method == "POST":
@@ -98,7 +98,7 @@ def diary_diet_create_view(request): # 飲食日記
     return JsonResponse(output,safe=False)
 
 @csrf_exempt
-def last_upload(request): # 最後上傳時間
+def last_upload(request): # 25.最後上傳時間
     uid = request.user.id
     uid = 123
     upload = []
@@ -128,7 +128,7 @@ def last_upload(request): # 最後上傳時間
     return JsonResponse(output)
 
 @csrf_exempt
-def records(request): # 刪除日記記錄
+def records(request): # 40.刪除日記記錄
     uid = request.user.id
     uid = 123
     output = {"status":"1"}
@@ -153,7 +153,7 @@ def records(request): # 刪除日記記錄
     return JsonResponse(output)
 
 @csrf_exempt
-def diary_list(request): # 日記列表資料
+def diary_list(request): # 14.日記列表資料
     uid = request.user.id
     uid = 123
     date = request.GET.get("date")

@@ -1,0 +1,35 @@
+from django import forms
+
+class infoForm(forms.Form):
+	phone = forms.CharField(max_length = 20,required = False)
+	name = forms.CharField(max_length = 20,required = False)
+	birthday = forms.DateField(required = False)#yyyy-mm-dd
+	height = forms.CharField(max_length = 20,required = False)
+	gender = forms.BooleanField(required = False)#0/1(Flase/True)
+	fcm_id = forms.CharField(max_length = 10,required = False)
+	address = forms.CharField(max_length = 100,required = False)
+	weight = forms.CharField(max_length = 20,required = False)
+
+class sugarinfoForm(forms.Form):
+	sugar_delta_max = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	sugar_delta_min = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	sugar_morning_max = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	sugar_morning_min = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	sugar_evening_max = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	sugar_evening_min = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	sugar_before_max = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	sugar_before_min = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	sugar_after_max = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	sugar_after_min = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	systolic_max = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	systolic_min = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	diastolic_max = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	diastolic_min = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	pulse_max = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	pulse_min = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	weight_max = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	weight_min = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	bmi_max = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	bmi_min = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	body_fat_max = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)
+	body_fat_min = forms.DecimalField(max_digits = 20,decimal_places = 5,required = False)

@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'measure.apps.MeasureConfig',
     'friend.apps.FriendConfig',
+    'Denru.apps.DenruConfig',
+    'info.apps.InfoConfig',
 ]
 
 MIDDLEWARE = [
@@ -121,3 +123,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#Email
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_HOST_USER = 'davidwu5858'
+
+EMAIL_HOST_PASSWORD = '23306323'
+
+EMAIL_PORT = 465
+
+EMAIL_USE_SSL = True

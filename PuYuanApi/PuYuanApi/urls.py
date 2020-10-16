@@ -18,6 +18,8 @@ from django.urls import path
 from django.conf.urls import include
 from django.views.generic import RedirectView
 from measure.views import pressure_create_view,index,weight_create_view,sugar_create_view
+from Denru.views import *
+from info.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +27,18 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/halo/')),
     path('halo/',index),
     path('api/friend/',include('friend.urls')),
+
+    #Denru
+    path('api/register/check/', RegCheck), #可
+    path('api/user/privacy-policy/', pp), #可
+    path('api/register/', Reg), #可
+    path('api/auth/', login), #可
+    path('api/verification/send/', sendcode), #可
+    path('api/verification/check/', codechecking), #可
+    path('api/password/forgot/', forget), #可
+    path('api/password/reset/', reset), #可
+    #info
+    path('api/user/', information), #可
+    path('api/user/default/', individualdefault), #可
+    # path('api/user/a1c', a1c),
 ]
