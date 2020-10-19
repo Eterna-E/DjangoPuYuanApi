@@ -2,8 +2,10 @@ from django.shortcuts import render
 # from .forms import PressureForm,WeightForm,SugarForm
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from datetime import date,datetime
 import json
 from .models import Pressure,Weight,Sugar,Diary_diet,UserCare
+from friend.models import Friend_data
 
 # Create your views here.
 def index(request):
@@ -240,4 +242,40 @@ def diary_list(request): # 14.日記列表資料
     else:
         output = {"status":"1"}
     # print(json.dumps(output))
+    return JsonResponse(output)
+
+@csrf_exempt
+def care(request): # 28.送出關懷諮詢!+27.獲取關懷諮詢!
+    uid = request.user.id
+    uid = 123
+    
+    output = {"status":"1"}
+    if request.method == 'POST':
+        print(request.body)
+        data = str(request.body).replace('b','',1).replace("\\r\\n",'').replace('\'','')
+        print(data)
+        data = json.loads(data)
+        message = data['message']
+        recorded_at = data['recorded_at']
+        recorded_at = recorded_at.replace("%20", " ")
+        recorded_at = recorded_at.replace("%3A", ":")
+        friend_list = Friend_data.objects.filter(uid=uid, status=1)
+        for friend_data in friend_list:
+            UserCare.objects.create(uid=uid, member_id=friend_data.friend_type, reply_id=friend_data.relation_id, message=message, updated_at=recorded_at)
+        output = {"status":"0"}
+    if request.method == 'GET':
+        usercares = UserCare.objects.filter(reply_id=uid)
+        cares = []
+        for usercare in usercares:
+            r = {
+                    "id":usercare.id,
+                    "user_id":usercare.uid,
+                    "member_id":usercare.member_id,
+                    "reply_id":usercare.reply_id,
+                    "message":usercare.message,
+                    "created_at":str(usercare.created_at),
+                    "updated_at":str(usercare.updated_at)
+                }
+            cares.append(r)
+        output = {"status":"0", "cares":cares}
     return JsonResponse(output)

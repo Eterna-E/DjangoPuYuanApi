@@ -11,4 +11,5 @@ urlpatterns = [
     path('user/diary/', diary_list),#可
     path('user/last-upload/', last_upload),#可
     path('user/records/', records), #可
+    path('user/care/', care), #未測完成
 ]
