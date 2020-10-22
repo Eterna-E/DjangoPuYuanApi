@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib import admin
 # Create your models here.
 
 class patient(User):
@@ -31,13 +32,13 @@ class patient(User):
 	unit_of_sugar = models.CharField(max_length = 20,null = True)
 	unit_of_weight = models.CharField(max_length = 20,null = True)
 	unit_of_height = models.CharField(max_length = 20,null = True)
-	def __str__(self):
-		return self.username
+	# def __str__(self):
+	# 	return self.username
 class checkcode(models.Model):
 	email = models.EmailField(max_length = 100)
 	code = models.CharField(max_length = 20)
-	def __str__(self):
-		return self.phone
+	# def __str__(self):
+	# 	return self.phone
 class sugarinfo(models.Model):
 	sugar_delta_max = models.DecimalField(max_digits = 20,decimal_places = 5,default = 0)
 	sugar_delta_min = models.DecimalField(max_digits = 20,decimal_places = 5,default = 0)
@@ -62,28 +63,52 @@ class sugarinfo(models.Model):
 	body_fat_max = models.DecimalField(max_digits = 20,decimal_places = 5,default = 0)
 	body_fat_min = models.DecimalField(max_digits = 20,decimal_places = 5,default = 0)
 	patient = models.OneToOneField(patient, on_delete = models.CASCADE,default = True)
-	def __str__(self):
-		return self.sugar_delta_max
+	# def __str__(self):
+	# 	return self.sugar_delta_max
 class bloodinfo(models.Model):
 	a1c = models.DecimalField(max_digits = 20,decimal_places = 5,default = 0)
 	recorded_at = models.DateTimeField(null = True)
 	patient = models.ForeignKey(patient, on_delete = models.CASCADE,default = True)
 	created_at = models.DateTimeField(null = True,auto_now_add = True)#可以用auth.User.date_joined屬性找到
 	update_at = models.DateTimeField(null = True,auto_now = True)
-	def __str__(self):
-		return str(self.a1c)
+	# def __str__(self):
+	# 	return str(self.a1c)
 class medi(models.Model):
 	typee = models.CharField(max_length = 20,null = True)
 	hospitalname = models.CharField(max_length = 20,null = True)
 	recorded_at = models.DateTimeField(null = True)
 	patient = models.ForeignKey(patient, on_delete = models.CASCADE,default = True)
-	def __str__(self):
-		return str(self.a1c)
+	# def __str__(self):
+	# 	return str(self.a1c)
 class diabete(models.Model):
 	diabetes_type = models.CharField(max_length = 20,null = True)
 	insulin = models.CharField(max_length = 20,null = True)
 	anti_hypertensives = models.CharField(max_length = 20,null = True)
 	oad = models.CharField(max_length = 20,null = True)
 	patient = models.OneToOneField(patient, on_delete = models.CASCADE,default = True)
-	def __str__(self):
-		return str(self.diabetes_type)
+	# def __str__(self):
+	# 	return str(self.diabetes_type)
+
+@admin.register(patient)
+class patientAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in patient._meta.fields]
+
+@admin.register(checkcode)
+class checkcodeAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in checkcode._meta.fields]
+
+@admin.register(sugarinfo)
+class sugarinfoAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in sugarinfo._meta.fields]
+
+@admin.register(bloodinfo)
+class bloodinfoAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in bloodinfo._meta.fields]
+
+@admin.register(medi)
+class mediAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in medi._meta.fields]
+
+@admin.register(diabete)
+class diabeteAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in diabete._meta.fields]
