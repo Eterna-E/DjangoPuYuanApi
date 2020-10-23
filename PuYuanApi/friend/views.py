@@ -89,7 +89,7 @@ def friend_requests(request): # 18.獲取控糖團邀請
                             "account":user.email,
                             "email":user.email,
                             "phone":user.phone,
-                            "fb_id":user.fb_id,
+                            "fb_id":"null",
                             "status":user.status,
                             "group":user.group,
                             "birthday":str(user.birthday),
