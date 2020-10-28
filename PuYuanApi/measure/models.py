@@ -7,9 +7,8 @@ class Pressure(models.Model):#8.上傳血壓測量結果
     systolic = models.FloatField(null=True)
     diastolic = models.FloatField(null=True)
     pulse = models.DecimalField(max_digits = 10, decimal_places=0,null=True)
-    recorded_at = models.DateTimeField(blank=True)
-    # recorded_at = models.DateTimeField(auto_now_add=True)
-    # print(systolic,diastolic,pulse,recorded_at)
+    recorded_at= models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True, blank=True)
     date = models.DateField(auto_now=False, auto_now_add=True, blank=True,null=True)
 
 class Weight(models.Model): #9.上傳體重測量結果
@@ -17,14 +16,16 @@ class Weight(models.Model): #9.上傳體重測量結果
     weight = models.FloatField(null=True)
     body_fat = models.FloatField(null=True)
     bmi = models.FloatField(blank=True)
-    recorded_at = models.DateTimeField(blank=True)
+    recorded_at= models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True, blank=True)
     date = models.DateField(auto_now=False, auto_now_add=True, blank=True,null=True)
 
 class Sugar(models.Model): #10.上傳血糖
     uid = models.CharField(max_length = 100,blank=True)
     sugar = models.DecimalField(max_digits = 10, decimal_places=0, blank=True, null=True)
     timeperiod = models.DecimalField(max_digits = 10, decimal_places=0, blank=True, null=True)
-    recorded_at = models.DateTimeField(blank=True)
+    recorded_at= models.DateTimeField(auto_now=False, auto_now_add=False, blank=True) # 上傳時間
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True, blank=True)
     date = models.DateField(auto_now=False, auto_now_add=True, blank=True,null=True)
 
 class Diary_diet(models.Model): #15.飲食日記

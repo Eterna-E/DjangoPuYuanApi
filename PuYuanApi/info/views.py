@@ -11,11 +11,15 @@ def information(request):
 	try:
 		if request.method == 'PATCH':
 			result = {'status': '1'}#重設失敗
+			
 			print(request.body)
 			session_key = request.headers.get('Authorization')[7:]#從header抓出session key
 			authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼
 			user = patient.objects.get(id = authuser)#把資訊從資料庫拉出來
+			
 			print(user)
+			print(user.id)
+			print(authuser)
 			print(request.body.decode('UTF-8'))
 			raw = request.body.decode('UTF-8')
 			table = {'%40': '@'}#alter

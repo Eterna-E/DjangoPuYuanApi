@@ -7,11 +7,14 @@ from datetime import date,datetime
 from django.views.decorators.csrf import csrf_exempt
 import json
 from Denru.models import patient
+from measure.models import *
+from django.contrib.sessions.models import Session
 
 @csrf_exempt
 def friend_code(request): # 16.獲取控糖團邀請碼
-    uid = request.user.id
-    uid = 123
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     try:
         user_friend = Friend.objects.get(uid=uid)
     except:
@@ -22,8 +25,9 @@ def friend_code(request): # 16.獲取控糖團邀請碼
 
 @csrf_exempt
 def friend_list(request): # 17.控糖團列表
-    uid = request.user.id
-    uid = 123
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     if request.method == 'GET':
         if Friend_data.objects.filter(uid=uid, status=1):
             friends = []
@@ -31,8 +35,8 @@ def friend_list(request): # 17.控糖團列表
             print(friend_list)
             for friend in friends_list:
                 print(friend.relation_id)
-                user_pro = patient.objects.get(id=4)
-                relation = patient.objects.get(id=4)
+                user_pro = patient.objects.get(id=uid)
+                relation = patient.objects.get(id=uid)
                 # user_pro = patient.objects.get(id=friend.relation_id)
                 # relation = patient.objects.get(id=user_pro.uid)
                 r = {
@@ -63,8 +67,9 @@ def friend_list(request): # 17.控糖團列表
 
 @csrf_exempt
 def friend_requests(request): # 18.獲取控糖團邀請
-    uid = request.user.id
-    uid = 123
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     try:
         requests_list = Friend_data.objects.filter(relation_id=uid, status=0)
     except:
@@ -93,9 +98,9 @@ def friend_requests(request): # 18.獲取控糖團邀請
                             "status":user.status,
                             "group":user.group,
                             "birthday":str(user.birthday),
-                            "height":float(user.height),
+                            "height":user.height,
                             "gender":user.gender,
-                            "verified":user.verified,
+                            "verified":user.email_verfied,
                             "privacy_policy":user.privacy_policy,
                             "must_change_password":user.must_change_password,
                             "badge":user.badge,
@@ -109,8 +114,9 @@ def friend_requests(request): # 18.獲取控糖團邀請
 
 @csrf_exempt
 def friend_send(request): # 19.送出控糖團邀請
-    uid = request.user.id
-    uid = 123
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     if request.method == 'POST':
         nowtime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         print(request.body)
@@ -143,8 +149,9 @@ def friend_send(request): # 19.送出控糖團邀請
 
 @csrf_exempt
 def friend_accept(request,friend_data_id): # 20.接受控糖團邀請
-    uid = request.user.id
-    
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     nowtime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     print(1234)
     try:
@@ -190,7 +197,9 @@ def friend_remove(request,friend_data_id): # 22.刪除控糖團邀請
 
 @csrf_exempt
 def friend_results(request): # 26.控糖團結果
-    uid = request.user.id
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     if request.method == 'GET':
         if Friend_data.objects.filter(uid=uid, read=True, imread=False):
             results = []
@@ -201,6 +210,7 @@ def friend_results(request): # 26.控糖團結果
             updated_at_friendata = datetime.strftime(result.updated_at, '%Y-%m-%d %H:%M:%S')
             created_at_userfile = datetime.strftime(relation.created_at, '%Y-%m-%d %H:%M:%S')
             updated_at_userfile = datetime.strftime(relation.updated_at, '%Y-%m-%d %H:%M:%S')
+            print(results)
             r = {
                 "id":result.id,
                 "user_id":result.uid,
@@ -217,16 +227,16 @@ def friend_results(request): # 26.控糖團結果
                             "account":relation.email,
                             "email":relation.email,
                             "phone":relation.phone,
-                            "fb_id":user_pro.fb_id,
+                            "fb_id":"null",
                             "status":relation.status,
                             "group":relation.group,
                             "birthday":str(relation.birthday),
                             "height":relation.height,
                             "gender":relation.gender,
-                            "verified":relation.verified,
+                            "verified":relation.email_verfied,
                             "privacy_policy":relation.privacy_policy,
                             "must_change_password":relation.must_change_password,
-                            "badge":int(relation.badge),
+                            "badge":relation.badge,
                             "created_at":created_at_userfile,
                             "updated_at":updated_at_userfile
                         }
@@ -241,13 +251,234 @@ def friend_results(request): # 26.控糖團結果
 
 @csrf_exempt
 def friend_remove_more(request): # 37.刪除更多好友
-    uid = request.user.id
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     if request.method == 'DELETE':
         ids_list = request.GET.getlist("ids[]")
-        for ids in ids_list :
-            Friend_data.objects.get(uid=ids, relation_id=uid, status=1).delete()
-            Friend_data.objects.get(uid=uid, relation_id=ids, status=1).delete()
-        output = {"status":"0"}
+        try:
+            for ids in ids_list :
+                try:
+                    Friend_data.objects.get(uid=ids, relation_id=uid, status=1).delete()
+                except:
+                    pass
+                try:
+                    Friend_data.objects.get(uid=uid, relation_id=ids, status=1).delete()
+                except:
+                    pass
+        except:
+            output = {"status":"0"}
+        else:
+            output = {"status":"0"}
     else:
         output = {"status":"1"}
     return JsonResponse(output)
+
+@csrf_exempt
+def notification(request): # 36.親友團通知
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
+    if request.method == 'POST':
+        nowtime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print(request.body)
+        data = str(request.body, encoding="utf-8").replace('b','').replace("\\r\\n",'').replace('\'','')
+        print(data)
+        data = json.loads(data)
+        message = data['message']
+        try:
+            friend_list = Friend_data.objects.filter(uid=uid, friend_type=0, status=1)
+            for friend in friend_list:
+                Notification.objects.create(uid=uid, member_id=1, reply_id=friend.relation_id, message=message, updated_at=nowtime)
+        except:
+            output = {"status":"1"}
+        else:
+            output = {"status":"0"}
+        return JsonResponse(output,safe=False)
+
+@csrf_exempt
+def share(request): # 23.分享
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
+    if request.method == 'POST':
+        print(request.body)
+        data = str(request.body, encoding="utf-8").replace('b','').replace("\\r\\n",'').replace('\'','')
+        print(data)
+        data = json.loads(data)
+        share_id = data['id']
+        data_type = data['type']
+        relation_type = data['relation_type']
+        try:
+            Share.objects.create(uid=uid, fid=share_id, data_type=data_type, relation_type=relation_type)
+        except:
+            output = {"status":"1"}
+        else:
+            output = {"status":"0"}
+        return JsonResponse(output,safe=False)
+
+@csrf_exempt
+def share_check(request,relation_type): # 24.查看分享（含自己分享出去的）
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
+    print('relation_type:',relation_type)
+    if request.method == 'GET':
+        if Share.objects.filter(relation_type=relation_type):
+            share_checks = Share.objects.filter(relation_type=relation_type)
+            datas = []
+            for share_check in share_checks:
+                print(share_check.id)
+                print('data type:',share_check.data_type)
+                user = patient.objects.get(id=uid)
+                r = None
+                if share_check.data_type == '0' :
+                    share_data = Pressure.objects.get(uid=share_check.uid, id=share_check.fid)
+                    created_at = datetime.strftime(share_data.created_at, '%Y-%m-%d %H:%M:%S')
+                    recorded_at = datetime.strftime(share_data.recorded_at, '%Y-%m-%d %H:%M:%S')
+                    created_at_userfile = datetime.strftime(user.created_at, '%Y-%m-%d %H:%M:%S')
+                    updated_at_userfile = datetime.strftime(user.updated_at, '%Y-%m-%d %H:%M:%S')
+                    r = {
+                        "id":share_data.id,
+                        "user_id":share_data.uid,
+                        "systolic":share_data.systolic,
+                        "diastolic":share_data.diastolic,
+                        "pulse":share_data.pulse,
+                        "recorded_at":recorded_at,
+                        "created_at":created_at,
+                        "type":0,
+                        "user":{
+                            "id":user.id,
+                            "name":user.name,
+                            "account":user.email,
+                            "email":user.email,
+                            "phone":user.phone,
+                            "fb_id":None,
+                            "status":user.status,
+                            "group":user.group,
+                            "birthday":user.birthday,
+                            "height":user.height,
+                            "gender":user.gender,
+                            "verified":user.email_verfied,
+                            "privacy_policy":user.privacy_policy,
+                            "must_change_password":user.must_change_password,
+                            "badge":user.badge,
+                            "created_at":created_at_userfile,
+                            "updated_at":updated_at_userfile
+                            }
+                        }
+                if share_check.data_type == '1' :
+                    share_data = Weight.objects.get(uid=share_check.uid, id=share_check.fid)
+                    created_at = datetime.strftime(share_data.created_at, '%Y-%m-%d %H:%M:%S')
+                    recorded_at = datetime.strftime(share_data.recorded_at, '%Y-%m-%d %H:%M:%S')
+                    created_at_userfile = datetime.strftime(user.created_at, '%Y-%m-%d %H:%M:%S')
+                    updated_at_userfile = datetime.strftime(user.updated_at, '%Y-%m-%d %H:%M:%S')
+                    r = {
+                        "id":share_data.id,
+                        "user_id":share_data.uid,
+                        "weight":float(share_data.weight),
+                        "body_fat":float(share_data.body_fat),
+                        "bmi":float(share_data.bmi),
+                        "recorded_at":recorded_at,
+                        "created_at":created_at,
+                        "type":1,
+                        "user":{
+                            "id":user.id,
+                            "name":user.name,
+                            "account":user.email,
+                            "email":user.email,
+                            "phone":user.phone,
+                            "fb_id":None,
+                            "status":user.status,
+                            "group":user.group,
+                            "birthday":user.birthday,
+                            "height":user.height,
+                            "gender":user.gender,
+                            "verified":user.email_verfied,
+                            "privacy_policy":user.privacy_policy,
+                            "must_change_password":user.must_change_password,
+                            "badge":user.badge,
+                            "created_at":created_at_userfile,
+                            "updated_at":updated_at_userfile
+                            }
+                        }
+                if share_check.data_type == '2' :
+                    share_data = Sugar.objects.get(uid=share_check.uid, id=share_check.fid)
+                    created_at = datetime.strftime(share_data.created_at, '%Y-%m-%d %H:%M:%S')
+                    recorded_at = datetime.strftime(share_data.recorded_at, '%Y-%m-%d %H:%M:%S')
+                    created_at_userfile = datetime.strftime(user.created_at, '%Y-%m-%d %H:%M:%S')
+                    updated_at_userfile = datetime.strftime(user.updated_at, '%Y-%m-%d %H:%M:%S')
+                    r = {
+                        "id":share_data.id,
+                        "user_id":share_data.uid,
+                        "sugar":float(share_data.sugar),
+                        "timeperiod":int(share_data.timeperiod),
+                        "recorded_at":recorded_at,
+                        "created_at":created_at,
+                        "type":2,
+                        "user":{
+                            "id":user.id,
+                            "name":user.name,
+                            "account":user.email,
+                            "email":user.email,
+                            "phone":user.phone,
+                            "fb_id":None,
+                            "status":user.status,
+                            "group":user.group,
+                            "birthday":user.birthday,
+                            "height":user.height,
+                            "gender":user.gender,
+                            "verified":user.email_verfied,
+                            "privacy_policy":user.privacy_policy,
+                            "must_change_password":user.must_change_password,
+                            "badge":user.badge,
+                            "created_at":created_at_userfile,
+                            "updated_at":updated_at_userfile
+                            }
+                        }
+                if share_check.data_type == '3' :
+                    share_data = Diary_diet.objects.get(uid=share_check.uid, id=share_check.fid)
+                    created_at = datetime.strftime(share_data.created_at, '%Y-%m-%d %H:%M:%S')
+                    recorded_at = datetime.strftime(share_data.recorded_at, '%Y-%m-%d %H:%M:%S')
+                    created_at_userfile = datetime.strftime(user.created_at, '%Y-%m-%d %H:%M:%S')
+                    updated_at_userfile = datetime.strftime(user.updated_at, '%Y-%m-%d %H:%M:%S')
+                    image_count = str(share_data.image_count)
+                    r = {
+                        "id":share_data.id,
+                        "user_id":share_data.uid,
+                        "description":share_data.description,
+                        "meal":int(share_data.meal),
+                        "tag":share_data.tag,
+                        # "image":str(image),
+                        "image_count":share_data.image_count,
+                        "lat":share_data.lat,
+                        "lng":share_data.lng,
+                        "recorded_at":recorded_at,
+                        "created_at":created_at,
+                        "type":3,
+                        "user":{
+                            "id":user.id,
+                            "name":user.name,
+                            "account":user.email,
+                            "email":user.email,
+                            "phone":user.phone,
+                            "fb_id":None,
+                            "status":user.status,
+                            "group":user.group,
+                            "birthday":user.birthday,
+                            "height":user.height,
+                            "gender":user.gender,
+                            "verified":user.email_verfied,
+                            "privacy_policy":user.privacy_policy,
+                            "must_change_password":user.must_change_password,
+                            "badge":user.badge,
+                            "created_at":created_at_userfile,
+                            "updated_at":updated_at_userfile
+                            }
+                        }
+                if r != None:
+                    datas.append(r)
+            output = {"status":"0", "records":datas}
+        else:
+            output = {"status":"1"}
+        return JsonResponse(output)

@@ -6,6 +6,7 @@ from datetime import date,datetime
 import json
 from .models import Pressure,Weight,Sugar,Diary_diet,UserCare
 from friend.models import Friend_data
+from django.contrib.sessions.models import Session
 
 # Create your views here.
 def index(request):
@@ -15,8 +16,9 @@ def index(request):
 
 @csrf_exempt
 def pressure_create_view(request): # 8.上傳血壓測量結果
-    uid = request.user.id
-    uid = 123
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     if request.method == "POST":
         print(request.body)
         data = str(request.body).replace('b','').replace("\\r\\n",'').replace('\'','')
@@ -36,13 +38,15 @@ def pressure_create_view(request): # 8.上傳血壓測量結果
 
 @csrf_exempt
 def weight_create_view(request): # 9.上傳體重測量結果
-    uid = request.user.id
-    uid = 123
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     if request.method == "POST":
         print(request.body)
         data = str(request.body).replace('b','',1).replace("\\r\\n",'').replace('\'','')
         print(data)
         data = json.loads(data)
+
         weight = data['weight']
         body_fat = data['body_fat']
         bmi = data['bmi']
@@ -57,13 +61,15 @@ def weight_create_view(request): # 9.上傳體重測量結果
 
 @csrf_exempt
 def sugar_create_view(request): # 10.上傳血糖測量結果
-    uid = request.user.id
-    uid = 123
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     if request.method == "POST":
         print(request.body)
         data = str(request.body).replace('b','',1).replace("\\r\\n",'').replace('\'','')
         print(data)
         data = json.loads(data)
+
         sugar = data['sugar']
         timeperiod = data['timeperiod']
         recorded_at = data['recorded_at']
@@ -77,13 +83,15 @@ def sugar_create_view(request): # 10.上傳血糖測量結果
 
 @csrf_exempt
 def diary_diet_create_view(request): # 15.飲食日記
-    uid = request.user.id
-    uid = 123
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     if request.method == "POST":
         print(request.body)
         data = str(request.body, encoding="utf-8").replace('b','',1).replace("\\r\\n",'').replace('\'','').replace("\\","\\\\")
         print(data)
         data = json.loads(data)
+
         description = data['description']
         meal = data['meal']
         tag = str(data['tag'])
@@ -101,8 +109,9 @@ def diary_diet_create_view(request): # 15.飲食日記
 
 @csrf_exempt
 def last_upload(request): # 25.最後上傳時間
-    uid = request.user.id
-    uid = 123
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     upload = []
     if request.method == 'GET':
         if Pressure.objects.filter(uid=uid):
@@ -131,8 +140,7 @@ def last_upload(request): # 25.最後上傳時間
 
 @csrf_exempt
 def records(request): # 40.刪除日記記錄
-    uid = request.user.id
-    uid = 123
+    
     output = {"status":"1"}
     if request.method == 'DELETE':
         if request.GET.getlist("blood_pressures[]"):
@@ -156,8 +164,9 @@ def records(request): # 40.刪除日記記錄
 
 @csrf_exempt
 def diary_list(request): # 14.日記列表資料
-    uid = request.user.id
-    uid = 123
+    # session_key = request.headers.get('Authorization')#從header抓出session key
+    # authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    # uid = authuser
     date = request.GET.get("date")
     print(date)
     diary = []
@@ -246,8 +255,9 @@ def diary_list(request): # 14.日記列表資料
 
 @csrf_exempt
 def care(request): # 28.送出關懷諮詢!+27.獲取關懷諮詢!
-    uid = request.user.id
-    uid = 123
+    session_key = request.headers.get('Authorization')#從header抓出session key
+    authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼，取得user id
+    uid = authuser
     
     output = {"status":"1"}
     if request.method == 'POST':

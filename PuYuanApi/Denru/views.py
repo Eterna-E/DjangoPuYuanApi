@@ -9,6 +9,7 @@ from Denru.models import *
 from django.core.mail import send_mail
 import smtplib
 from django.http import HttpResponse
+from friend.models import Friend
 
 # 註冊確認
 def RegCheck(request):
@@ -42,14 +43,15 @@ def Reg(request):
 				print(password)
 				username = username.replace('%40', '@')#email @ alter
 				email = email.replace('%40', '@')
-				user = patient.objects.create(username=username,email=email)#創建使用者
+				invite_code = "".join(random.sample('0123456789',6))
+				user = patient.objects.create(username=username,email=email ,invite_code=invite_code)#創建使用者
 				#新增表單
 				sugarinfo.objects.create(patient = user)
 				diabete.objects.create(patient = user)
 				user.set_password(password)
 				print(user.username)
 				user.save()
-	
+				Friend.objects.create(uid=user.id,invite_code=invite_code)
 				result['status'] = '0'#創建成功
 		#except:
 		#	pass
@@ -102,7 +104,7 @@ def codechecking(request):
 	if request.method == 'POST':
 		#if 1:
 		try:
-			if checkcode.objects.get(phone=request.POST['phone']):#如果phone存在且一樣
+			if checkcode.objects.get(email=request.POST['email']):#如果phone存在且一樣
 				if checkcode.objects.get(code=request.POST['code']):#如果打進來的phone跟code一樣就
 					result = {'status': '0'}#驗證成功 
 		except:

@@ -24,7 +24,7 @@ class patient(User):
 	badge = models.CharField(max_length = 20,null = True)#徽章?! 不知道是啥
 	login_times = models.CharField(max_length = 100,default = 0)#登入幾次 每按一次login+1
 	created_at = models.DateTimeField(null = True,auto_now_add = True)#可以用auth.User.date_joined屬性找到
-	update_at = models.DateTimeField(null = True,auto_now = True)# 每次有更動就更新 應該就是在其他api加更改現在時間的設定
+	updated_at = models.DateTimeField(null = True,auto_now = True)# 每次有更動就更新 應該就是在其他api加更改現在時間的設定
 	after_recording = models.CharField(max_length = 20,null = True)
 	no_recording_for_a_day = models.CharField(max_length = 20,null = True)
 	over_max_or_under_min = models.CharField(max_length = 20,null = True)
@@ -32,6 +32,7 @@ class patient(User):
 	unit_of_sugar = models.CharField(max_length = 20,null = True)
 	unit_of_weight = models.CharField(max_length = 20,null = True)
 	unit_of_height = models.CharField(max_length = 20,null = True)
+	invite_code = models.CharField(max_length=100,null=True)
 	# def __str__(self):
 	# 	return self.username
 class checkcode(models.Model):
