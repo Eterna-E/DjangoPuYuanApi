@@ -75,17 +75,18 @@ class bloodinfo(models.Model):
 	# def __str__(self):
 	# 	return str(self.a1c)
 class medi(models.Model):
-	typee = models.CharField(max_length = 20,null = True)
-	hospitalname = models.CharField(max_length = 20,null = True)
+	typee = models.CharField(max_length = 20,default = "123")
+	hospitalname = models.CharField(max_length = 20,default = "hospital")
 	recorded_at = models.DateTimeField(null = True)
 	patient = models.ForeignKey(patient, on_delete = models.CASCADE,default = True)
 	# def __str__(self):
 	# 	return str(self.a1c)
 class diabete(models.Model):
-	diabetes_type = models.CharField(max_length = 20,null = True)
-	insulin = models.CharField(max_length = 20,null = True)
-	anti_hypertensives = models.CharField(max_length = 20,null = True)
-	oad = models.CharField(max_length = 20,null = True)
+	diabetes_type = models.CharField(max_length = 20,default='4')
+	insulin = models.CharField(max_length = 20,default='1')
+	anti_hypertensives = models.CharField(max_length = 20,default='1')
+	oad = models.CharField(max_length = 20,default='1')
+	update_at = models.DateTimeField(null = True,auto_now = True)
 	patient = models.OneToOneField(patient, on_delete = models.CASCADE,default = True)
 	# def __str__(self):
 	# 	return str(self.diabetes_type)

@@ -128,7 +128,7 @@ def information(request):
 			'badge':user.badge if user.badge is None else int(user.badge),
 			'login_times':user.login_times if user.login_times is None else int(user.login_times),
 			'created_at':user.date_joined.strftime("%Y-%m-%d %H:%M:%S"),
-			'update_at':user.update_at.strftime("%Y-%m-%d %H:%M:%S"),
+			'updated_at':user.updated_at.strftime("%Y-%m-%d %H:%M:%S"),},
 
 			#default
 			'default':{
@@ -155,7 +155,7 @@ def information(request):
 			'body_fat_max':user.sugarinfo.body_fat_max if user.sugarinfo.body_fat_max is None else int(user.sugarinfo.body_fat_max),
 			'body_fat_min':user.sugarinfo.body_fat_min if user.sugarinfo.body_fat_min is None else int(user.sugarinfo.body_fat_min),
 			'created_at':user.date_joined.strftime("%Y-%m-%d %H:%M:%S"),
-			'update_at':user.update_at.strftime("%Y-%m-%d %H:%M:%S"),},
+			'updated_at':user.updated_at.strftime("%Y-%m-%d %H:%M:%S"),},
 			
 			#settings
 			'setting':{
@@ -169,10 +169,10 @@ def information(request):
 			'unit_of_weight':int(user.unit_of_weight),
 			'unit_of_height':int(user.unit_of_height),
 			'created_at':user.date_joined.strftime("%Y-%m-%d %H:%M:%S"),
-			'update_at':user.update_at.strftime("%Y-%m-%d %H:%M:%S")
+			'updated_at':user.updated_at.strftime("%Y-%m-%d %H:%M:%S")
 			}
 			}
-			}
+			
 			#print info
 	#except:
 		
@@ -184,7 +184,7 @@ def individualdefault(request):
 		#if 1:
 		result = {'status': '1'}#設定失敗
 		try:
-			session_key = request.headers.get('Authorization')#從header抓出session key
+			session_key = request.headers.get('Authorization')[7:]#從header抓出session key
 			authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼
 			user = patient.objects.get(id = authuser)#把資訊從資料庫拉出來
 

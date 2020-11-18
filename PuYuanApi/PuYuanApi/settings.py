@@ -26,7 +26,7 @@ SECRET_KEY = 'kmczu!-$_!r&d*+@v%irp&#9$5$3=g3$x!6ida$==hwlj!=n*('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -116,7 +116,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -124,7 +124,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-#Email
+# Email
 EMAIL_HOST = 'smtp.gmail.com'
 
 EMAIL_HOST_USER = 'davidwu5858'

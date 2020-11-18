@@ -22,7 +22,7 @@ def a1c(request):
 				record = {}
 				record["id"] = item.id
 				record['user_id'] = user.id
-				record['a1c'] = int(item.a1c)
+				record['a1c'] = str(item.a1c)
 				if item.recorded_at:
 					record['recorded_at'] = item.recorded_at.strftime("%Y-%m-%d %H:%M:%S")
 				if item.created_at:
@@ -51,17 +51,29 @@ def a1c(request):
 			session_key = request.headers.get('Authorization')[7:]#從header抓出session key
 			authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼
 			user = patient.objects.get(id = authuser)#把資訊從資料庫拉出來
-			a = user.bloodinfo_set
+			a = user.bloodinfo_set.all()
+			print(a)
 			print(request.get_full_path())
 			data = request.get_full_path()
-			data = data.split('=')[1][1:-1]
-			data = data.split(',')
+			data = data.split('?')[1]
+			data = data.replace('%5B%5D%5B%5D=',"")
+			data = data.split("&")
+			for i in range(len(data)):
+				data[i] = data[i].replace("ids","")
 			print(data)
-			for i in data:
-				a.get(id = int(i)).delete()
+			for i in range(len(data)):
+				num = data[i]
+				a.get(id = num).delete()
+			# data = request.get_full_path()
+			# data = data.split('=')[1][1:-1]
+			# data = data.split(',')
+			# print(data)
+			# for i in data:
+			# 	a.get(id = int(i)).delete()
 			result = {'status':'0'}
 	#except:
 		#pass
+		print(result)
 	return JsonResponse(result)
 
 def medicine(request):
@@ -109,14 +121,19 @@ def medicine(request):
 			session_key = request.headers.get('Authorization')[7:]#從header抓出session key
 			authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼
 			user = patient.objects.get(id = authuser)#把資訊從資料庫拉出來
-			a = user.medi_set
+			a = user.medi_set.all()
 			print(request.get_full_path())
 			data = request.get_full_path()
-			data = data.split('=')[1][1:-1]
-			data = data.split(',')
+			data = data.split('?')[1]
+			data = data.replace('%5B%5D%5B%5D=',"")
+			data = data.split("&")
 			print(data)
-			for i in data:
-				a.get(id = int(i)).delete()
+			for i in range(len(data)):
+				data[i] = data[i].replace("ids","")
+			print(data)
+			for i in range(len(data)):
+				num = data[i]
+				a.get(id = num).delete()
 			result = {'status':'0'}
 	#except:
 		#pass
@@ -153,32 +170,32 @@ def mediinfo(request):
 			authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼
 			user = patient.objects.get(id = authuser)#把資訊從資料庫拉出來
 			if user.diabete.diabetes_type:
-				user.diabete.diabetes_type = int(user.diabete.diabetes_type)
+				user.diabete.diabetes_type = user.diabete.diabetes_type
 			else:
-				user.diabete.diabetes_type = None
+				user.diabete.diabetes_type = 1
 			if user.diabete.oad:
 				user.diabete.oad = int(user.diabete.oad)
 			else:
-				user.diabete.oad = None 
+				user.diabete.oad = 1
 			if user.diabete.insulin:
 				user.diabete.insulin = int(user.diabete.insulin)
 			else:
-				user.diabete.insulin = None 
+				user.diabete.insulin = 1
 			if user.diabete.anti_hypertensives:
 				user.diabete.anti_hypertensives = int(user.diabete.anti_hypertensives)
 			else:
-				user.diabete.anti_hypertensives = None 
+				user.diabete.anti_hypertensives = 1
 			result = {
 			"status": "0",
 			"medical_info": {
-				"id": 1,
-				"user_id": user.id,
-				"diabetes_type": user.diabete.diabetes_type,
-				"oad": user.diabete.oad,
-				"insulin": user.diabete.insulin,
-				"anti_hypertensives": user.diabete.anti_hypertensives,
-				"created_at": user.date_joined.strftime("%Y-%m-%d %H:%M:%S"),
-				"updated_at": user.update_at.strftime("%Y-%m-%d %H:%M:%S")
+				"id": int(user.id),
+				"user_id": int(user.id),
+				"diabetes_type": int(user.diabete.diabetes_type),
+				"oad": int(user.diabete.oad),
+				"insulin": int(user.diabete.insulin),
+				"anti_hypertensives": int(user.diabete.anti_hypertensives),
+				"created_at": user.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+				"updated_at": user.diabete.update_at.strftime("%Y-%m-%d %H:%M:%S")
 							}
 					}#成功
 	#except:

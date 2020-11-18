@@ -25,6 +25,8 @@ class Sugar(models.Model): #10.上傳血糖
     sugar = models.DecimalField(max_digits = 10, decimal_places=0, blank=True, null=True)
     timeperiod = models.DecimalField(max_digits = 10, decimal_places=0, blank=True, null=True)
     recorded_at= models.DateTimeField(auto_now=False, auto_now_add=False, blank=True) # 上傳時間
+    drug = models.BooleanField(max_length = 10,null = True,default = False)
+    exercise = models.BooleanField(max_length = 10,null = True,default = False)#信箱驗證
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True, blank=True)
     date = models.DateField(auto_now=False, auto_now_add=True, blank=True,null=True)
 

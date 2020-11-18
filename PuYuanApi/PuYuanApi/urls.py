@@ -20,6 +20,7 @@ from django.views.generic import RedirectView
 from measure.views import pressure_create_view,index,weight_create_view,sugar_create_view
 from Denru.views import *
 from info.views import *
+from blood.views import *
 from friend.views import notification,share,share_check
 
 urlpatterns = [
@@ -45,5 +46,10 @@ urlpatterns = [
     #info
     path('api/user/', information), #可
     path('api/user/default/', individualdefault), #可
-    # path('api/user/a1c', a1c),
+    #blood
+    path('api/user/medical/',mediinfo),
+    path('api/user/badge/', bage),
+    path('api/news/', news),
+    path('api/user/a1c/', a1c),
+    path('api/user/drug-used/', medicine),
 ]

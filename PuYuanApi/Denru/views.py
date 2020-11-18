@@ -139,7 +139,7 @@ def reset(request):
 	if request.method == 'POST':
 		#if 1:
 		try:
-			session_key = request.headers.get('Authorization')#從header抓出session key
+			session_key = request.headers.get('Authorization')[7:]#從header抓出session key
 			authuser = Session.objects.get(session_key=session_key).get_decoded()['_auth_user_id']#把跟session key合的user授權抓出來解碼
 			user = patient.objects.get(id = authuser)#把資訊從資料庫拉出來
 			password = request.POST['password']#抓POST_password
