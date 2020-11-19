@@ -158,7 +158,7 @@ def diary_diet_create_view(request):  # 15.飲食日記
     authuser = Session.objects.get(session_key=session_key).get_decoded()[
         '_auth_user_id']  # 把跟session key合的user授權抓出來解碼，取得user id
     uid = authuser
-    output = {"status": "1"}
+    output = {"status": "0"}
     if request.method == "POST":
         try:
             print(request.body)
@@ -182,7 +182,7 @@ def diary_diet_create_view(request):  # 15.飲食日記
                     if data[index]:
                         setattr(d, index, data[index])
                 output = {
-                    "status": "0", "image_url": "http://211.23.17.100:3001/diet_1_2020-08-17_11:11:11_0"}
+                    "status": "0", "image_url": "http://192.168.1.83:8000/diet_1_2020-08-17_11:11:11_0"}
 
             # data = json.loads(data)
 
@@ -392,15 +392,15 @@ def care(request):  # 28.送出關懷諮詢!+27.獲取關懷諮詢!
         data = str(request.body).replace('b', '', 1).replace(
             "\\r\\n", '').replace('\'', '')
         print(data)
-        data = json.loads(data)
-        message = data['message']
-        recorded_at = data['recorded_at']
-        recorded_at = recorded_at.replace("%20", " ")
-        recorded_at = recorded_at.replace("%3A", ":")
+        message = data.replace('message=','')
+        # data = json.loads(data)
+        # message = data['message']
         friend_list = Friend_data.objects.filter(uid=uid, status=1)
+        print(friend_list)
         for friend_data in friend_list:
+            print(123456789)
             UserCare.objects.create(uid=uid, member_id=friend_data.friend_type,
-                                    reply_id=friend_data.relation_id, message=message, updated_at=recorded_at)
+                                    reply_id=friend_data.relation_id, message=message)
         output = {"status": "0"}
     if request.method == 'GET':
         usercares = UserCare.objects.filter(reply_id=uid)

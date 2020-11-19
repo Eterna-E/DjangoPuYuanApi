@@ -49,7 +49,7 @@ class UserCare(models.Model):
     reply_id = models.IntegerField(blank=True,null=True)
     message = models.CharField(max_length = 100,blank=True)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True, blank=True)
-    updated_at = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
+    # updated_at = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
     date = models.DateField(auto_now=False, auto_now_add=True, blank=True,null=True)
 
 @admin.register(Pressure)
