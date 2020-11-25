@@ -160,46 +160,55 @@ def diary_diet_create_view(request):  # 15.飲食日記
     uid = authuser
     output = {"status": "0"}
     if request.method == "POST":
-        try:
-            print(request.body)
-            data = str(request.body, encoding="utf-8").replace('b', '',
-                                                               1).replace("\\r\\n", '').replace('\'', '').replace("\\", "\\\\")
-            print(data)
-            table = {'%40': '@', '%20': ' ',
-                     "%3A": ':', "%5B%5D%5B%5D": ""}  # alter
-            for char in table:  # 把長串資料用&分開
-                data = data.replace(char, table[char])
-            rawlist = data.split('&')
-            data = {var.split('=')[0]: var.split('=')[1]
-                    for var in rawlist if var.split('=')[1]}
-            print(data)
-            form = DietForm(data)
-            if form.is_valid():
-                data = form.cleaned_data
-                print(data)
-                d = Diary_diet.objects.create(uid=uid)
-                for index in data:
-                    if data[index]:
-                        setattr(d, index, data[index])
-                output = {
-                    "status": "0", "image_url": "http://192.168.1.83:8000/diet_1_2020-08-17_11:11:11_0"}
+        # try:
+        print(request.body)
+        data = str(request.body, encoding="utf-8").replace('b', '',1).replace("\\r\\n", '').replace('\'', '').replace("\\", "\\\\").replace("%20"," ").replace("%3A",":")
+        print(data)
+        data = data.split("&")
+        print(data)
 
-            # data = json.loads(data)
+        description = data[0].replace("description=","")
+        image = data[1].replace("image=","")
+        lat = data[2].replace("lat=","")
+        lng = data[3].replace("lng=","")
+        meal = data[4].replace("meal=","")
+        recorded_at = data[5].replace("recorded_at=","")
+        for d in data:
+            if 'tag%5B%5D%5B%5D=' in d:
+                tag = d.replace("tag%5B%5D%5B%5D=","")
+            else:
+                tag = ""
+        # try:
+        Diary_diet.objects.create(uid=uid,description = description,image_count = image,lat = lat,lng = lng,meal = meal,recorded_at = recorded_at,tag = tag)
+        # except:
+        #     pass
+        # form = DietForm(data)
+        # if form.is_valid():
+        #     data = form.cleaned_data
+        #     print(data)
+        #     d = Diary_diet.objects.create(uid=uid)
+        #     for index in data:
+        #         if data[index]:
+        #             setattr(d, index, data[index])
+        output = {"status": "0", "image_url": "http://192.168.1.83:8000/diet_1_2020-08-17_11:11:11_0"}
 
-            # description = data['description']
-            # meal = data['meal']
-            # tag = str(data['tag'])
-            # image_count = data['image']
-            # lat = data['lat']
-            # lng = data['lng']
-            # recorded_at = data['recorded_at']
-            # try:
-            #     print('-'*50)
-            # except Exception:
-            #     print(Exception)
-            #     output = {"status":"1"}
-        except:
-            print('123456')
+        # data = json.loads(data)
+
+        # description = data['description']
+        # meal = data['meal']
+        # tag = str(data['tag'])
+        # image_count = data['image']
+        # lat = data['lat']
+        # lng = data['lng']
+        # recorded_at = data['recorded_at']
+        # try:
+        #     print('-'*50)
+        # except Exception:
+        #     print(Exception)
+        #     output = {"status":"1"}
+        print(output)
+        # except:
+        #     print('123456')
     return JsonResponse(output, safe=False)
 
 
@@ -285,8 +294,7 @@ def records(request):  # 40.刪除日記記錄
 
 @csrf_exempt
 def diary_list(request):  # 14.日記列表資料
-    session_key = request.headers.get('Authorization')[
-        7:]  # 從header抓出session key
+    session_key = request.headers.get('Authorization')[7:]  # 從header抓出session key
     authuser = Session.objects.get(session_key=session_key).get_decoded()[
         '_auth_user_id']  # 把跟session key合的user授權抓出來解碼，取得user id
     if request.method == 'GET':

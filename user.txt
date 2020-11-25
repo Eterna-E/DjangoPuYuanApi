@@ -1,13 +1,33 @@
 davidwu5858@gmail.com
 89813david
+069175
 
 davidwu1209@gmail.com
 12345678
 862974
+醫師團:1234.asdf.qwer
+親友團:asdf.qwer.uiop
+控糖團:qwer
 
 davidwu1234@gmail.com
 147258369
 463510
+
+asdf@gmail.com
+aaaaa
+408957
+
+qwer@gmail.com
+bbbbb
+734219
+
+uiop@gmail.com
+123123123
+480152
+
+hjkl@gmail.com
+456456456
+107395
 
 選單:
 	最新消息V
@@ -26,3 +46,9 @@ davidwu1234@gmail.com
 	控糖團列表Ｖ
 	查看分享（含自己分享出去的）Ｖ
 
+11/20 : 修了 friend_results ,friend_requests
+下次要修 : friend_list
+測試結果 : 我先用postman強制接受交友邀請(1234寄邀請給1209)，然後發現1234每次回到控糖團都會出現「poop已經接受 控糖團的邀請」
+poop就是1209，1209分享的東西1234也能看得到，但是刪除無法作動，不確定是哪一支api，而且刪除頁面顯示的名字是None
+
+11/23 完成了傳送交友邀請 friend_list 要修

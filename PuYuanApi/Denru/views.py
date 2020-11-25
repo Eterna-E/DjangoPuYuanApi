@@ -59,20 +59,19 @@ def Reg(request):
 #登入Session
 def login(request):
 	if request.method == 'POST':
-		if 1 :
-			user = auth.authenticate(username=request.POST['account'], password=request.POST['password'])
-			auth.login(request, user)
+		# if 1 :
+		result = {'status': '1'}#登入失敗
+		user = auth.authenticate(username=request.POST['account'], password=request.POST['password'])
+		auth.login(request, user)
+		try:
 			#把資訊從資料庫拉出來
-		#try:
 			if user is not None and user.is_active:
 				user = patient.objects.get(username = request.POST['account'])
 				user.login_times = str(int(user.login_times) + 1)
 				user.save()
-				result = {'status': '0','token': request.session.session_key}#登入成功
-			else:
-				result = {'status': '1'}#登入失敗
-		#except:
-			#pass
+				result = {'status': '0','token': request.session.session_key}#登入成功		except:
+		except:
+			pass
 	return JsonResponse(result)
 #傳驗證碼
 def sendcode(request):
@@ -115,23 +114,25 @@ def codechecking(request):
 def forget(request):
 	if request.method == 'POST':
 		#if 1:
+		result = {'status': '1'}#
 		try:
 			user = patient.objects.get(email=request.POST['email'])#抓出那個人的密碼.email
 			email = user.email
 			newPW = ''.join(random.sample(string.ascii_letters + string.digits, 10))#生成10位暫時密碼
 			user.set_password(newPW)#更改資料庫中的密碼
+			user.must_change_password = True
 			user.save()#儲存資訊
 			#傳更改的新密碼給user
 			send_mail(
 				'gai mi ma',
 				newPW,
-				'davidwu5858@gmail.com',
+				"davidwu5858@gmail.com",
 				[email],
 				fail_silently=False,
 			)
 			result = {'status': '0'}#更改成功
 		except:
-			result = {'status': '1'}#更改失敗
+			pass
 	return JsonResponse(result)
 
 #重設密碼
