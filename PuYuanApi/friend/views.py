@@ -466,41 +466,44 @@ def share_check(request, relation_type):  # 24.查看分享（含自己分享出
 					birthday = "1999-11-01"
 				r = None
 				if share_check.data_type == '0':
-					share_data = Pressure.objects.get(uid=share_check.uid, id=share_check.fid)
-					created_at = datetime.strftime(share_data.created_at, '%Y-%m-%d %H:%M:%S')
-					recorded_at = datetime.strftime(share_data.recorded_at, '%Y-%m-%d %H:%M:%S')
-					created_at_userfile = datetime.strftime(user.created_at, '%Y-%m-%d %H:%M:%S')
-					updated_at_userfile = datetime.strftime(user.updated_at, '%Y-%m-%d %H:%M:%S')
-					r = {
-						"id": share_data.id,
-						"user_id": str2int(share_data.uid),
-						"systolic": str2int(share_data.systolic),
-						"diastolic": str2int(share_data.diastolic),
-						"pulse": str2int(share_data.pulse),
-						"recorded_at": recorded_at,
-						"created_at": created_at,
-						"type": 0,
-						"user": {
-							"id": user.id,
-							"name": int2str(user.name),
-							"account": user.email,
-							"email": user.email,
-							"phone": int2str(user.phone),
-							"fb_id": "1",
-							"status": int2str(user.status),
-							"group": user.group,
-							"birthday": birthday,
-							"height": str2int(user.height),
-							"gender": boolean2int(user.gender),
-							"verified": boolean2int(user.email_verfied),
-							"privacy_policy": str2int(user.privacy_policy),
-							"must_change_password": boolean2int(user.must_change_password),
-							"badge": str2int(user.badge),
-							"created_at": created_at_userfile,
-							"updated_at": updated_at_userfile
+					try:
+						share_data = Pressure.objects.get(uid=share_check.uid, id=share_check.fid)
+						created_at = datetime.strftime(share_data.created_at, '%Y-%m-%d %H:%M:%S')
+						recorded_at = datetime.strftime(share_data.recorded_at, '%Y-%m-%d %H:%M:%S')
+						created_at_userfile = datetime.strftime(user.created_at, '%Y-%m-%d %H:%M:%S')
+						updated_at_userfile = datetime.strftime(user.updated_at, '%Y-%m-%d %H:%M:%S')
+						r = {
+							"id": share_data.id,
+							"user_id": str2int(share_data.uid),
+							"systolic": str2int(share_data.systolic),
+							"diastolic": str2int(share_data.diastolic),
+							"pulse": str2int(share_data.pulse),
+							"recorded_at": recorded_at,
+							"created_at": created_at,
+							"type": 0,
+							"user": {
+								"id": user.id,
+								"name": int2str(user.name),
+								"account": user.email,
+								"email": user.email,
+								"phone": int2str(user.phone),
+								"fb_id": "1",
+								"status": int2str(user.status),
+								"group": user.group,
+								"birthday": birthday,
+								"height": str2int(user.height),
+								"gender": boolean2int(user.gender),
+								"verified": boolean2int(user.email_verfied),
+								"privacy_policy": str2int(user.privacy_policy),
+								"must_change_password": boolean2int(user.must_change_password),
+								"badge": str2int(user.badge),
+								"created_at": created_at_userfile,
+								"updated_at": updated_at_userfile
+							}
 						}
-					}
-					# print(r)
+						# print(r)
+					except:
+						pass
 				if share_check.data_type == '1':
 					try:
 						share_data = Weight.objects.get(uid=share_check.uid, id=share_check.fid)

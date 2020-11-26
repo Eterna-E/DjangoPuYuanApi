@@ -29,10 +29,27 @@ hjkl@gmail.com
 456456456
 107395
 
+new test accounts:
+	tyui@gmail.com(主帳號)
+	111222
+	961437
+	控糖團：
+		醫生團　fghj
+		親友團　cvbn
+
+		控糖團　davidwu1209.davidwu1234(用來看分享跟批量刪除)
+
+	fghj@gmail.com
+	222333
+	431678
+
+	cvbn@gmail.com
+	333444
+	103928
+
 選單:
 	最新消息V
 	衛教資訊V
-	服務介紹X
 	個人資訊V
 	就醫資訊V
 	目標設定V
